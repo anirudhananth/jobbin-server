@@ -50,7 +50,7 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
     try {
         const userData = req.body;
-        const { data, error } = await supabase.auth.signIn({
+        const { data, error } = await supabase.auth.signInWithPassword({
             email: userData.email,
             password: userData.password
         });
@@ -72,7 +72,7 @@ app.post("/login", async (req, res) => {
         } });
     } catch (error) {
         console.error("Error logging in user: ", error);
-        res.status(500).json({ error: "Failed to login user: ", error });
+        res.status(500).json({ error });
     }
 });
 
