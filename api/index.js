@@ -72,7 +72,7 @@ app.post("/login", async (req, res) => {
         } });
     } catch (error) {
         console.error("Error logging in user: ", error);
-        res.status(500).json({ error: "Failed to login user" });
+        res.status(500).json({ error: "Failed to login user: ", error });
     }
 });
 
