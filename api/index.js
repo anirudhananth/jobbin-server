@@ -1,13 +1,95 @@
 const express = require("express");
 const app = express();
 const { createClient } = require("@supabase/supabase-js");
+const cors = require("cors");
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
 const supabaseUrl = "https://ykcecftnsyyclchogssh.supabase.co";
 const supabase = createClient(supabaseUrl, process.env.SUPABASE_KEY);
+const corsOptions = {
+    origin: [
+      'chrome-extension://eeikkhebkpoeajjjdhnnnhpgdnepgghc',
+    ],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+  };
 
-app.get("/get_jobs", async (req, res) => {
+app.use(cors(corsOptions));
+app.use(express.json());
+
+app.post("/register", async (req, res) => {
+    const userData = req.body;
+
+    try {
+        const { data, error } = await supabase.auth.signUp({
+            email: userData.email,
+            password: userData.password,
+            options: {
+                emailRedirectTo: "https://eeikkhebkpoeajjjdhnnnhpgdnepgghc.chromiumapp.org/"
+            }
+        })
+
+        const { _, err } = await supabase
+            .from("users")
+            .insert({
+                firstName: userData.firstName,
+                lastName: userData.lastName,
+                email: userData.email
+            });
+
+        if (err) throw error;
+
+        res.status(200).json({ message: "User registered successfully", data });
+    } catch (error) {
+        console.error("Error registering user: ", error);
+        res.status(500).json({ error: "Failed to register user" });
+    }
+})
+
+app.post("/login", async (req, res) => {
+    try {
+        const userData = req.body;
+        const { data, error } = await supabase.auth.signIn({
+            email: userData.email,
+            password: userData.password
+        });
+
+        if (error) throw error;
+
+        const { user, err } = await supabase
+        .from('users')
+        .select('*')
+        .eq('id', data.user?.id)
+        .single();
+
+        if (err) throw err;
+
+        res.status(200).json({ message: "User logged in successfully", data: {
+            user: data.user,
+            firstName: user.firstName,
+            lastName: user.lastName
+        } });
+    } catch (error) {
+        console.error("Error logging in user: ", error);
+        res.status(500).json({ error: "Failed to login user" });
+    }
+});
+
+app.get("/logout", async (req, res) => {
+    try {
+        const { error } = await supabase.auth.signOut();
+
+        if (error) throw error;
+
+        res.status(200).json({ message: "User logged out successfully" });
+    } catch (error) {
+        console.error("Error logging out user: ", error);
+        res.status(500).json({ error: "Failed to logout user" });
+    }
+})
+
+app.post("/get_jobs", async (req, res) => {
     const jobData = req.body;
 
     try {
