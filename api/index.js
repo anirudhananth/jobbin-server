@@ -55,6 +55,8 @@ app.post("/login", async (req, res) => {
             password: userData.password
         });
 
+        console.log("Supabase user data: ", data);
+
         if (error) throw error;
 
         const { user, err } = await supabase
@@ -63,12 +65,14 @@ app.post("/login", async (req, res) => {
         .eq('id', data.user?.id)
         .single();
 
+        console.log("User info: ", user);
+
         if (err) throw err;
 
         res.status(200).json({ message: "User logged in successfully", data: {
             user: data.user,
-            firstName: user.firstName,
-            lastName: user.lastName
+            firstName: user.first_name,
+            lastName: user.last_name
         } });
     } catch (error) {
         console.error("Error logging in user: ", error);
