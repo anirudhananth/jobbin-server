@@ -69,11 +69,11 @@ app.post("/login", async (req, res) => {
 
         if (err) throw err;
 
-        res.status(200).json({ message: "User logged in successfully", data: {
+        res.status(200).json({
             user: data.user,
             firstName: user.first_name,
             lastName: user.last_name
-        } });
+        });
     } catch (error) {
         console.error("Error logging in user: ", error);
         res.status(500).json({ error });
