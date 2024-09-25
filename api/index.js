@@ -59,11 +59,11 @@ app.post("/login", async (req, res) => {
 
         if (error) throw error;
 
-        const { user, err } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', data.user?.id)
-        .single();
+        const { data: user, error: err } = await supabase
+            .from('users')
+            .select('*')
+            .eq('id', data.user?.id)
+            .single();
 
         console.log("User info: ", user);
 
