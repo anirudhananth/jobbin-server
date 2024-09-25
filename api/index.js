@@ -93,7 +93,7 @@ app.get("/logout", async (req, res) => {
     }
 })
 
-app.post("/get_jobs", async (req, res) => {
+app.post("/add_job", async (req, res) => {
     const jobData = req.body;
 
     try {
