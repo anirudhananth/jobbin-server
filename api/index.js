@@ -130,7 +130,7 @@ app.get("/get_jobs", async (req, res) => {
 
 app.put("/update_job", async (req, res) => {
     const { jobId, status } = req.body;
-
+    console.log("Updating Job ID ", jobId, " with status ", status);
     try {
         const { data, error } = await supabase
             .from("job_applications")
