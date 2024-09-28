@@ -117,7 +117,8 @@ app.get("/get_jobs", async (req, res) => {
         const { data, error } = await supabase
             .from("job_applications")
             .select("*")
-            .eq("user_id", user_id);
+            .eq("user_id", user_id)
+            .order("timestamp", { ascending: false });
 
         if (error) throw error;
 
