@@ -128,6 +128,24 @@ app.get("/get_jobs", async (req, res) => {
     }
 });
 
+app.get("/update_job", async (req, res) => {
+    const { jobId, status } = req.body;
+
+    try {
+        const { data, error } = await supabase
+            .from("job_applications")
+            .update({ status })
+            .eq("id", jobId);
+
+        if (error) throw error;
+
+        res.status(200).json({ message: "Job application updated successfully", data });
+    } catch (error) {
+        console.error("Error updating job application: ", error);
+        res.status(500).json({ error: "Failed to update job application" });
+    }
+})
+
 app.listen(3000, () => console.log("Server ready on port 3000."));
 
 module.exports = app;
