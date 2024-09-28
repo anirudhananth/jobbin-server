@@ -148,13 +148,13 @@ app.put("/update_job", async (req, res) => {
 });
 
 app.delete("/delete_jobs", async (req, res) => {
-    const { jobsIds } = req.body;
+    const { jobIds } = req.body;
 
     try {
         const { data, error } = await supabase
             .from("job_applications")
             .delete()
-            .in("id", jobsIds);
+            .in("id", jobIds);
 
         if (error) throw error;
 
