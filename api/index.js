@@ -128,7 +128,7 @@ app.get("/get_jobs", async (req, res) => {
     }
 });
 
-app.get("/update_job", async (req, res) => {
+app.put("/update_job", async (req, res) => {
     const { jobId, status } = req.body;
 
     try {
