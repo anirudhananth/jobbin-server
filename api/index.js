@@ -45,7 +45,7 @@ app.post("/register", async (req, res) => {
         console.error("Error registering user: ", error);
         res.status(500).json({ error: "Failed to register user" });
     }
-})
+});
 
 app.post("/login", async (req, res) => {
     try {
@@ -91,7 +91,7 @@ app.get("/logout", async (req, res) => {
         console.error("Error logging out user: ", error);
         res.status(500).json({ error: "Failed to logout user" });
     }
-})
+});
 
 app.post("/add_job", async (req, res) => {
     const jobData = req.body;
@@ -145,7 +145,25 @@ app.put("/update_job", async (req, res) => {
         console.error("Error updating job application: ", error);
         res.status(500).json({ error: "Failed to update job application" });
     }
-})
+});
+
+app.delete("/delete_jobs", async (req, res) => {
+    const { jobsIds } = req.body;
+
+    try {
+        const { data, error } = await supabase
+            .from("job_applications")
+            .delete()
+            .in("id", jobsIds);
+
+        if (error) throw error;
+
+        res.status(200).json({ message: "Job applications deleted successfully", data });
+    } catch (error) {
+        console.error("Error deleting job applications: ", error);
+        res.status(500).json({ error: "Failed to delete job applications." });
+    }
+});
 
 app.listen(3000, () => console.log("Server ready on port 3000."));
 
