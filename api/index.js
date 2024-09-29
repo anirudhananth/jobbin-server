@@ -30,6 +30,9 @@ app.post("/register", async (req, res) => {
             }
         })
 
+        console.log(data, error);
+        if (error) throw error;
+
         const { _, err } = await supabase
             .from("users")
             .insert({
@@ -38,6 +41,7 @@ app.post("/register", async (req, res) => {
                 email: userData.email
             });
 
+        console.log(_, err);
         if (err) throw error;
 
         res.status(200).json({ message: "User registered successfully", data });
