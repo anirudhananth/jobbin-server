@@ -36,8 +36,8 @@ app.post("/register", async (req, res) => {
         const { _, err } = await supabase
             .from("users")
             .insert({
-                firstName: userData.firstName,
-                lastName: userData.lastName,
+                first_name: userData.firstName,
+                last_name: userData.lastName,
                 email: userData.email
             });
 
