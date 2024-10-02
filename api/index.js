@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const { createClient } = require("@supabase/supabase-js");
 const cors = require("cors");
+const path = require("path");
 
 app.get("/", (req, res) => res.send("Express on Vercel"));
 
@@ -17,6 +18,9 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 app.use(express.json());
+app.set("view engine", "ejs");
+app.set("views", path.join(__dirname, "views"));
+app.use(express.static(path.join(__dirname, "public")));
 
 app.post("/register", async (req, res) => {
     const userData = req.body;
@@ -170,6 +174,9 @@ app.delete("/delete_jobs", async (req, res) => {
     }
 });
 
+app.use((req, res) => {
+    res.status(404).render("404", { title: "Page not found." });
+})
 app.listen(3000, () => console.log("Server ready on port 3000."));
 
 module.exports = app;
